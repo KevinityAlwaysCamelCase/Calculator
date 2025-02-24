@@ -22,6 +22,7 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
     const mathConstants: Record<string, string> = {
         "pi": "π",
         "phi": "φ",
+        "tau": "τ"
     };
     const mathConstVal: Record<string, number> = {
         "π": 3.14159_26535_89793_23846_26433_83279_50288_41971_69399_37510_58209_74944_59230_78164_06286_20899_86280_34825_34211_70679,
@@ -78,7 +79,7 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
         // Replacement of the other letters that needs backslash
         for (let key in greekLetters) {
-            let regex = new RegExp(key, "g"); // Direct match (includes `\`)
+            let regex = new RegExp("\\" + key, "g"); // Direct match (includes `\`)
             inputText = inputText.replace(regex, greekLetters[key]);
         }
 
@@ -107,14 +108,41 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
     // evaluating the calculation
     function evaluateExpression() {
-        let calculation: string[] = calcInput.value.split(""); // the input of the user decomposed
+        let calculation: string = calcInput.value; // the input of the user decomposed
         let calc: string = ""; // initial calc that is gonna be evaluated
         let isValid = true; // variable to see if there is an invalid character
+        let variables: Record<string, number> = {};
+
+        if (calcInput.value.includes("where")) {
+            let indexOfWhere = calcInput.value.indexOf("where");
+            let slicedCalc = calcInput.value.slice(indexOfWhere + 5);
+            let definedVars = slicedCalc.split(";");
+
+            definedVars.forEach((variable) => {
+                let components = variable.split("=");
+                if (components.length === 2) {
+                    let key = components[0].trim();
+                    let value = parseFloat(components[1].trim());
+                    if (!isNaN(value)) {
+                        variables[key] = value;
+                    }
+                    if (numbers.includes(key)) {
+                        isValid = false;
+                        return;
+                    }
+                } else {
+                    isValid = false;
+                    return;
+                }
+            })
+        }
+
+        calculation = calculation.split("where")[0].trim()
 
         // checking if the components are valid
         for (let i = 0; i < calculation.length; i++) {
             let char = calculation[i];
-            if (!numbers.includes(char) && !operators.includes(char) && contains(mathConstants, char)) {
+            if (!numbers.includes(char) && !operators.includes(char) && contains(mathConstants, char) && contains(Object.keys(variables), char)) {
                 console.log("invalid input");
                 isValid = false; // tells that there is an invalid character and doesn't let it continue
                 break;
@@ -129,6 +157,10 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
                 for (let key in mathConstVal) {
                     const regex = new RegExp(key, 'g');
                     calc = calc.replace(regex, mathConstVal[key].toString());
+                }
+                for (let key in variables) {
+                    const regex = new RegExp(key, 'g');
+                    calc = calc.replace(regex, variables[key].toString());
                 }
 
                 let result = eval(calc);
@@ -146,7 +178,6 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
     // event listener for when we enter the calculation
     calcInput.addEventListener('input', () => {
-        console.log("kevin");
         replaceSymbols();
         evaluateExpression();
     });

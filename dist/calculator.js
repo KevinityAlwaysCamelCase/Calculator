@@ -20,6 +20,7 @@ else {
     var mathConstants_1 = {
         "pi": "π",
         "phi": "φ",
+        "tau": "τ"
     };
     var mathConstVal_1 = {
         "π": 3.141592653589793,
@@ -73,7 +74,7 @@ else {
         }
         // Replacement of the other letters that needs backslash
         for (var key in greekLetters_1) {
-            var regex = new RegExp(key, "g"); // Direct match (includes `\`)
+            var regex = new RegExp("\\" + key, "g"); // Direct match (includes `\`)
             inputText = inputText.replace(regex, greekLetters_1[key]);
         }
         // Update the input field if changes were made
@@ -101,13 +102,38 @@ else {
     }
     // evaluating the calculation
     function evaluateExpression() {
-        var calculation = calcInput.value.split(""); // the input of the user decomposed
+        var calculation = calcInput.value; // the input of the user decomposed
         var calc = ""; // initial calc that is gonna be evaluated
         var isValid = true; // variable to see if there is an invalid character
+        var variables = {};
+        if (calcInput.value.includes("where")) {
+            var indexOfWhere = calcInput.value.indexOf("where");
+            var slicedCalc = calcInput.value.slice(indexOfWhere + 5);
+            var definedVars = slicedCalc.split(";");
+            definedVars.forEach(function (variable) {
+                var components = variable.split("=");
+                if (components.length === 2) {
+                    var key = components[0].trim();
+                    var value = parseFloat(components[1].trim());
+                    if (!isNaN(value)) {
+                        variables[key] = value;
+                    }
+                    if (numbers_1.includes(key)) {
+                        isValid = false;
+                        return;
+                    }
+                }
+                else {
+                    isValid = false;
+                    return;
+                }
+            });
+        }
+        calculation = calculation.split("where")[0].trim();
         // checking if the components are valid
         for (var i = 0; i < calculation.length; i++) {
             var char = calculation[i];
-            if (!numbers_1.includes(char) && !operators_1.includes(char) && contains(mathConstants_1, char)) {
+            if (!numbers_1.includes(char) && !operators_1.includes(char) && contains(mathConstants_1, char) && contains(Object.keys(variables), char)) {
                 console.log("invalid input");
                 isValid = false; // tells that there is an invalid character and doesn't let it continue
                 break;
@@ -122,6 +148,10 @@ else {
                 for (var key in mathConstVal_1) {
                     var regex = new RegExp(key, 'g');
                     calc = calc.replace(regex, mathConstVal_1[key].toString());
+                }
+                for (var key in variables) {
+                    var regex = new RegExp(key, 'g');
+                    calc = calc.replace(regex, variables[key].toString());
                 }
                 var result = eval(calc);
                 // putting the result in the result container
@@ -138,7 +168,6 @@ else {
     }
     // event listener for when we enter the calculation
     calcInput.addEventListener('input', function () {
-        console.log("kevin");
         replaceSymbols();
         evaluateExpression();
     });
