@@ -8,4 +8,5 @@ this calculator is basic.
   <li>pi</li>
   <li>phi</li>
   <li>euler's constant</li>
+  <li>tau</li>
 </ul>
