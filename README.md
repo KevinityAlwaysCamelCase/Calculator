@@ -1,12 +1,21 @@
-This is a web calculator (now a calculator that calculates the web. It is a calculator that run on a website).
+This is a web calculator (Not a calculator that calculates the web. It is a calculator that run on a website).
 ---
-if you want to put a greek letter just type \and the letter you want and start with a capital letter if you want the capital version (doesn't have a use yet).
-this calculator is basic.
+### how to write a greek letter
+<p>to write a greek letter simply write a backslash and then the letter's name <span style="color: #000a;">(put the first letter in capital for the capital version of the letter)</span> example:<br/> \delta -> δ,<br/> \Delta -> Δ</p>
 
-## constants that are integrated: <br />
+### how to define variables
+to define variables you need to write "where" after the calculation and there you put the variable and then its value
+if you have more than one variable separate them by a semicolon ";"<br/>
+example:<br/>
+3*ω where ω = 5 -> 15<br/>
+9*a+2*b where a = 10; b = 5 -> 100<br/>
+you can put any letter(or symbol) you want for example:<br/>
+3*∫ where ∫=3 -> 9
+
+## constants that are supported: <br />
 <ul>
-  <li>pi</li>
-  <li>phi</li>
-  <li>euler's constant</li>
-  <li>tau</li>
+  <li>pi(&pi;)</li>
+  <li>phi(&phi;)</li>
+  <li>euler's constant(e)</li>
+  <li>tau(&tau;)</li>
 </ul>
