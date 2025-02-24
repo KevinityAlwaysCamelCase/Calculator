@@ -115,7 +115,6 @@ else {
     }
     // event listener for when we enter the calculation
     calcInput.addEventListener('input', () => {
-        console.log("kevin");
         replaceSymbols();
         evaluateExpression();
     });
