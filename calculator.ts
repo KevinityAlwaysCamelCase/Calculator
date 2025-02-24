@@ -78,7 +78,7 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
         // Replacement of the other letters that needs backslash
         for (let key in greekLetters) {
-            let regex = new RegExp(key, "g"); // Direct match (includes `\`)
+            let regex = new RegExp("\\" + key, "g"); // Direct match (includes `\`)
             inputText = inputText.replace(regex, greekLetters[key]);
         }
 
