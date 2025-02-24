@@ -1,0 +1,162 @@
+* {
+    font-family: 'roboto', sans-serif;
+    font-size: 1.2em;
+}
+
+@font-face {
+    font-family: 'roboto';
+    src: url(./Fonts/Roboto/Roboto-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'math';
+    src: url(Fonts/lato/Lato-Italic.ttf);
+}
+
+:root {
+    --blue: #3f60ff;
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+
+    background-color: var(--blue);
+
+    img {
+        width: 120px;
+    }
+}
+
+#calculator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+
+    width: 100vw;
+    height: 30vh;
+
+    border: 1px solid #000a;
+    border-radius: 15px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+.calculator-display {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: start;
+
+    margin: 15px 0;
+
+    width: 100%;
+    height: 150px;
+
+    border: 0 solid #000a;
+    border-width: 1px 0;
+}
+
+.calculator-input {
+    width: 100%;
+    height: 50%;
+
+    text-align: start;
+}
+
+.calculator-input input {
+    width: 100%;
+    height: 100%;
+
+    border: none;
+}
+
+.calculator-input input:focus {
+    outline: none;
+    border: none;
+}
+
+.calculator-display:has(input:focus) {
+    border: 3px solid #2b4ce2;
+}
+
+.calculator-output {
+    margin: 10px;
+    padding: 5px;
+
+    height: 30%;
+
+    background-color: #a0a0a0aa;
+
+    border: 1px solid #000a;
+    border-radius: 8px;
+
+    font-size: smaller;
+}
+
+.calculator-output p {
+    margin: 0;
+
+    width: fit-content;
+    height: 100%;
+
+    text-align: end;
+    color: #000a;
+}
+
+.calculator-output,
+.calculator-input input {
+    font-family: 'math', 'Times New Roman', Times, serif;
+}
+
+.calculator-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    width: 100vw;
+    height: 30vh;
+
+    background-color: #ddd;
+
+    border-top: 1px solid #0007;
+
+    position: absolute;
+    top: 70vh;
+    left: 0;
+    z-index: 10;
+
+    overflow-x: scroll;
+}
+
+.calculator-buttons .button {
+    margin: 2px;
+    padding: 5px;
+
+    width: 55px;
+    height: 55px;
+}
+
+.calculator-buttons .button .number-btn,
+.calculator-buttons .button .btn {
+    width: 100%;
+    height: 100%;
+
+    font-size: 30px
+}
