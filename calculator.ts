@@ -22,7 +22,16 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
     const operations: Record<string, string> = {
         "sqrt": "√",
         "log": "log",
-        "ln": "ln"
+        "ln": "ln",
+        "cos": "cos",
+        "sin": "sin",
+        "tan": "tan",
+        "cosh": "cosh",
+        "sinh": "sinh",
+        "tanh": "tanh",
+        "acos": "arccos",
+        "asin": "arcsin",
+        "atan": "arctan"
     }
 
     // Mathematical constants without backslash
@@ -30,20 +39,18 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
         "pi": "π",
         "phi": "φ",
         "tau": "τ",
-        "e": "e",
-        "g": "g",
+        "e": "𝘦",
+        "g": "ℊ",
         "G": "G",
-        "c": "c"
     };
     // the values of the constants
     const mathConstVal: Record<string, number> = {
         "π": 3.14159_26535_89793_23846_26433_83279_50288_41971_69399_37510_58209_74944_59230_78164_06286_20899_86280_34825_34211_70679,
         "φ": 1.61803398874989484820458683436563811772030917980576286213544862270526046281890244970720720418939113748475408807538689175,
-        "e": 2.718281828459045235360287471352662497757247093699959574966967627724076630353,
+        "𝘦": 2.718281828459045235360287471352662497757247093699959574966967627724076630353,
         "τ": 6.28318_53071_79586_47692,
-        "g": 9.81,
+        "ℊ": 9.81,
         "G": 6.67 * Math.pow(10, -11),
-        "c": 299_793_458
     }
     // General Greek letters requiring a backslash
     const greekLetters: Record<string, string> = {
@@ -190,7 +197,6 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
                 }
             )
         }
-
         if (calculation.includes("log")) {
             calculation = calculation.replace(
                 /log\(([^()]+)\)/g,
@@ -205,7 +211,6 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
                 }
             );
         }
-
         if (calculation.includes("ln")) {
             calculation = calculation.replace(
                 /ln\(([^()]+)\)/g,
@@ -213,6 +218,132 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
                     try {
                         const result = eval(subExpr);
                         return Math.log(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+        if (calculation.includes("cos")) {
+            calculation = calculation.replace(
+                /cos\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.cos(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+        if (calculation.includes("sin")) {
+            calculation = calculation.replace(
+                /sin\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.sin(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+        if (calculation.includes("tan")) {
+            calculation = calculation.replace(
+                /tan\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.tan(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+        if (calculation.includes("cosh")) {
+            calculation = calculation.replace(
+                /cosh\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.cosh(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+        if (calculation.includes("sinh")) {
+            calculation = calculation.replace(
+                /sinh\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.sinh(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+        if (calculation.includes("tanh")) {
+            calculation = calculation.replace(
+                /tanh\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.tanh(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+        if (calculation.includes("arccos")) {
+            calculation = calculation.replace(
+                /arccos\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.acos(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+        if (calculation.includes("arcsin")) {
+            calculation = calculation.replace(
+                /arcsin\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.asin(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+        if (calculation.includes("arctan")) {
+            calculation = calculation.replace(
+                /arctan\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.atan(result).toString();
                     } catch (e) {
                         isValid = false;
                         return "error";
@@ -237,7 +368,6 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
         if (isValid) {
             try {
-                // calc = replaceConstants(calc);
                 let result = eval(calc);
 
                 // putting the result in the result container

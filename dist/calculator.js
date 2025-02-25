@@ -20,27 +20,34 @@ else {
     var operations_1 = {
         "sqrt": "√",
         "log": "log",
-        "ln": "ln"
+        "ln": "ln",
+        "cos": "cos",
+        "sin": "sin",
+        "tan": "tan",
+        "cosh": "cosh",
+        "sinh": "sinh",
+        "tanh": "tanh",
+        "acos": "arccos",
+        "asin": "arcsin",
+        "atan": "arctan"
     };
     // Mathematical constants without backslash
     var mathConstants_1 = {
         "pi": "π",
         "phi": "φ",
         "tau": "τ",
-        "e": "e",
-        "g": "g",
+        "e": "𝘦",
+        "g": "ℊ",
         "G": "G",
-        "c": "c"
     };
     // the values of the constants
     var mathConstVal_1 = {
         "π": 3.141592653589793,
         "φ": 1.61803398874989484820458683436563811772030917980576286213544862270526046281890244970720720418939113748475408807538689175,
-        "e": 2.718281828459045235360287471352662497757247093699959574966967627724076630353,
+        "𝘦": 2.718281828459045235360287471352662497757247093699959574966967627724076630353,
         "τ": 6.283185307179586,
-        "g": 9.81,
+        "ℊ": 9.81,
         "G": 6.67 * Math.pow(10, -11),
-        "c": 299793458
     };
     // General Greek letters requiring a backslash
     var greekLetters_1 = {
@@ -202,6 +209,114 @@ else {
                 }
             });
         }
+        if (calculation.includes("cos")) {
+            calculation = calculation.replace(/cos\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.cos(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("sin")) {
+            calculation = calculation.replace(/sin\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.sin(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("tan")) {
+            calculation = calculation.replace(/tan\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.tan(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("cosh")) {
+            calculation = calculation.replace(/cosh\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.cosh(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("sinh")) {
+            calculation = calculation.replace(/sinh\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.sinh(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("tanh")) {
+            calculation = calculation.replace(/tanh\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.tanh(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("arccos")) {
+            calculation = calculation.replace(/arccos\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.acos(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("arcsin")) {
+            calculation = calculation.replace(/arcsin\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.asin(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("arctan")) {
+            calculation = calculation.replace(/arctan\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.atan(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
         calculation = calculation.split("where")[0].trim();
         // checking if the components are valid
         for (var i = 0; i < calculation.length; i++) {
@@ -217,7 +332,6 @@ else {
         }
         if (isValid) {
             try {
-                // calc = replaceConstants(calc);
                 var result = eval(calc);
                 // putting the result in the result container
                 resultContainer.innerHTML = result;
