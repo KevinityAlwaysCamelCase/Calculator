@@ -18,7 +18,9 @@ else {
     var operators_1 = "+-*/";
     // the operations
     var operations_1 = {
-        "sqrt": "√"
+        "sqrt": "√",
+        "log": "log",
+        "ln": "ln"
     };
     // Mathematical constants without backslash
     var mathConstants_1 = {
@@ -157,11 +159,35 @@ else {
             });
         }
         calculation = replaceVariables(calculation, variables);
-        if (contains(Object.values(operations_1), "√")) {
+        if (contains(Object.values(calculation), "√")) {
             calculation = calculation.replace(/√\(?([^)]+)\)?/g, function (_, subExpr) {
                 try {
                     var result = eval(subExpr);
                     return Math.sqrt(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("log")) {
+            calculation = calculation.replace(/log\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.log10(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
+                }
+            });
+        }
+        if (calculation.includes("ln")) {
+            calculation = calculation.replace(/ln\(([^()]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.log(result).toString();
                 }
                 catch (e) {
                     isValid = false;

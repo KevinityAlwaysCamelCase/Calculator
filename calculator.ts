@@ -20,7 +20,9 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
     // the operations
     const operations: Record<string, string> = {
-        "sqrt": "√"
+        "sqrt": "√",
+        "log": "log",
+        "ln": "ln"
     }
 
     // Mathematical constants without backslash
@@ -167,10 +169,10 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
         calculation = replaceVariables(calculation, variables);
 
-        if (contains(Object.values(operations), "√")) {
+        if (contains(Object.values(calculation), "√")) {
             calculation = calculation.replace(
                 /√\(?([^)]+)\)?/g,
-                (_, subExpr) => {
+                (_, subExpr): string => {
                     try {
                         const result = eval(subExpr);
                         return Math.sqrt(result).toString();
@@ -180,6 +182,36 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
                     }
                 }
             )
+        }
+
+        if (calculation.includes("log")) {
+            calculation = calculation.replace(
+                /log\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.log10(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
+        }
+
+        if (calculation.includes("ln")) {
+            calculation = calculation.replace(
+                /ln\(([^()]+)\)/g,
+                (_, subExpr): string => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.log(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            );
         }
 
         calculation = calculation.split("where")[0].trim();
