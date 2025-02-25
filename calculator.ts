@@ -5,6 +5,12 @@ let equalsBtn = document.getElementById('equals-btn') as HTMLButtonElement;
 let clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
 let backspaceBtn = document.getElementById('backspace-btn') as HTMLButtonElement;
 
+if (!Array.prototype.includes) {
+    Array.prototype.includes = function (search, start) {
+        return this.indexOf(search, start) !== -1;
+    };
+}
+
 // checking if they do not correspond to what we want
 if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) {
     console.error("One or more required elements are missing from the DOM.");
@@ -12,19 +18,24 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
     const numbers = "0123456789";
     const operators = "+-*/";
 
+    // the operations
+    const operations: Record<string, string> = {
+        "sqrt": "√"
+    }
+
     // Mathematical constants without backslash
     const mathConstants: Record<string, string> = {
         "pi": "π",
         "phi": "φ",
         "tau": "τ"
     };
+    // the values of the constants
     const mathConstVal: Record<string, number> = {
         "π": 3.14159_26535_89793_23846_26433_83279_50288_41971_69399_37510_58209_74944_59230_78164_06286_20899_86280_34825_34211_70679,
         "φ": 1.61803398874989484820458683436563811772030917980576286213544862270526046281890244970720720418939113748475408807538689175,
         "e": 2.718281828459045235360287471352662497757247093699959574966967627724076630353,
         "τ": 6.28318_53071_79586_47692
     }
-
     // General Greek letters requiring a backslash
     const greekLetters: Record<string, string> = {
         "\\alpha": "α",
@@ -75,6 +86,12 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
         for (let key in greekLetters) {
             let regex = new RegExp("\\" + key, "g"); // Direct match (includes `\`)
             inputText = inputText.replace(regex, greekLetters[key]);
+        }
+
+        // replacing the operations into their signs
+        for (let key in operations) {
+            let regex = new RegExp(`\\b${key}\\b`, "g");
+            inputText = inputText.replace(regex, operations[key]);
         }
 
         // Update the input field if changes were made
@@ -141,6 +158,21 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
                     return;
                 }
             })
+        }
+
+        if (contains(Object.values(operations), "√")) {
+            calculation = calculation.replace(
+                /√\(([^)]+)\)/g,
+                (_, subExpr) => {
+                    try {
+                        const result = eval(subExpr);
+                        return Math.sqrt(result).toString();
+                    } catch (e) {
+                        isValid = false;
+                        return "error";
+                    }
+                }
+            )
         }
 
         calculation = calculation.split("where")[0].trim();

@@ -4,6 +4,11 @@ var numBtn = document.querySelectorAll('.number-btn');
 var equalsBtn = document.getElementById('equals-btn');
 var clearBtn = document.getElementById('clear-btn');
 var backspaceBtn = document.getElementById('backspace-btn');
+if (!Array.prototype.includes) {
+    Array.prototype.includes = function (search, start) {
+        return this.indexOf(search, start) !== -1;
+    };
+}
 // checking if they do not correspond to what we want
 if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) {
     console.error("One or more required elements are missing from the DOM.");
@@ -11,12 +16,17 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 else {
     var numbers_1 = "0123456789";
     var operators_1 = "+-*/";
+    // the operations
+    var operations_1 = {
+        "sqrt": "√("
+    };
     // Mathematical constants without backslash
     var mathConstants_1 = {
         "pi": "π",
         "phi": "φ",
         "tau": "τ"
     };
+    // the values of the constants
     var mathConstVal_1 = {
         "π": 3.141592653589793,
         "φ": 1.61803398874989484820458683436563811772030917980576286213544862270526046281890244970720720418939113748475408807538689175,
@@ -71,6 +81,11 @@ else {
         for (var key in greekLetters_1) {
             var regex = new RegExp("\\" + key, "g"); // Direct match (includes `\`)
             inputText = inputText.replace(regex, greekLetters_1[key]);
+        }
+        // replacing the operations into their signs
+        for (var key in operations_1) {
+            var regex = new RegExp("\\b".concat(key, "\\b"), "g");
+            inputText = inputText.replace(regex, operations_1[key]);
         }
         // Update the input field if changes were made
         if (calcInput.value !== inputText) {
@@ -133,6 +148,18 @@ else {
                 else {
                     isValid = false;
                     return;
+                }
+            });
+        }
+        if (contains(Object.values(operations_1), "√")) {
+            calculation = calculation.replace(/√\(([^)]+)\)/g, function (_, subExpr) {
+                try {
+                    var result = eval(subExpr);
+                    return Math.sqrt(result).toString();
+                }
+                catch (e) {
+                    isValid = false;
+                    return "error";
                 }
             });
         }
