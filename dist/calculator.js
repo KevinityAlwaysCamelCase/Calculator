@@ -18,7 +18,7 @@ else {
     var operators_1 = "+-*/";
     // the operations
     var operations_1 = {
-        "sqrt": "√("
+        "sqrt": "√"
     };
     // Mathematical constants without backslash
     var mathConstants_1 = {
@@ -112,13 +112,17 @@ else {
     }
     // replacing variables with values
     function replaceVariables(input, variables) {
-        for (var key in mathConstVal_1) {
-            var regex = new RegExp(key, 'g');
-            input = input.replace(regex, mathConstVal_1[key].toString());
-        }
         for (var key in variables) {
             var regex = new RegExp(key, 'g');
             input = input.replace(regex, variables[key].toString());
+        }
+        return input;
+    }
+    // replacing mathematical constants with values
+    function replaceConstants(input) {
+        for (var key in mathConstVal_1) {
+            var regex = new RegExp(key, 'g');
+            input = input.replace(regex, mathConstVal_1[key].toString());
         }
         return input;
     }
@@ -128,7 +132,7 @@ else {
         var calc = ""; // initial calc that is gonna be evaluated
         var isValid = true; // variable to see if there is an invalid character
         var variables = {};
-        if (calcInput.value.includes("where")) {
+        if (calculation.includes("where")) {
             var indexOfWhere = calculation.indexOf("where");
             var slicedCalc = calculation.slice(indexOfWhere + 5);
             var definedVars = slicedCalc.split(";");
@@ -151,8 +155,9 @@ else {
                 }
             });
         }
+        calculation = replaceVariables(calculation, variables);
         if (contains(Object.values(operations_1), "√")) {
-            calculation = calculation.replace(/√\(([^)]+)\)/g, function (_, subExpr) {
+            calculation = calculation.replace(/√\(?([^)]+)\)?/g, function (_, subExpr) {
                 try {
                     var result = eval(subExpr);
                     return Math.sqrt(result).toString();
@@ -178,7 +183,7 @@ else {
         }
         if (isValid) {
             try {
-                calc = replaceVariables(calc, variables);
+                calc = replaceConstants(calc);
                 var result = eval(calc);
                 // putting the result in the result container
                 resultContainer.innerHTML = result;

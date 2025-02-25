@@ -118,15 +118,19 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
     }
     // replacing variables with values
     function replaceVariables(input: string, variables: Record<string, number>) {
-        for (let key in mathConstVal) {
-            const regex = new RegExp(key, 'g');
-            input = input.replace(regex, mathConstVal[key].toString());
-        }
         for (let key in variables) {
             const regex = new RegExp(key, 'g');
             input = input.replace(regex, variables[key].toString());
         }
         return input;
+    }
+    // replacing mathematical constants with values
+    function replaceConstants(input: string) {
+        for (let key in mathConstVal) {
+            const regex = new RegExp(key, 'g');
+            input = input.replace(regex, mathConstVal[key].toString());
+        }
+        return input
     }
 
     // evaluating the calculation
@@ -136,7 +140,7 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
         let isValid = true; // variable to see if there is an invalid character
         let variables: Record<string, number> = {};
 
-        if (calcInput.value.includes("where")) {
+        if (calculation.includes("where")) {
             let indexOfWhere = calculation.indexOf("where");
             let slicedCalc = calculation.slice(indexOfWhere + 5);
             let definedVars = slicedCalc.split(";");
@@ -160,9 +164,11 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
             })
         }
 
+        calculation = replaceVariables(calculation, variables);
+
         if (contains(Object.values(operations), "√")) {
             calculation = calculation.replace(
-                /√\(([^)]+)\)/g,
+                /√\(?([^)]+)\)?/g,
                 (_, subExpr) => {
                     try {
                         const result = eval(subExpr);
@@ -191,7 +197,7 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
         if (isValid) {
             try {
-                calc = replaceVariables(calc, variables);
+                calc = replaceConstants(calc);
                 let result = eval(calc);
 
                 // putting the result in the result container
