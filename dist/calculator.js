@@ -24,7 +24,8 @@ else {
     var mathConstants_1 = {
         "pi": "π",
         "phi": "φ",
-        "tau": "τ"
+        "tau": "τ",
+        "e": "e"
     };
     // the values of the constants
     var mathConstVal_1 = {

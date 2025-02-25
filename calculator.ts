@@ -27,7 +27,8 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
     const mathConstants: Record<string, string> = {
         "pi": "π",
         "phi": "φ",
-        "tau": "τ"
+        "tau": "τ",
+        "e": "e"
     };
     // the values of the constants
     const mathConstVal: Record<string, number> = {
