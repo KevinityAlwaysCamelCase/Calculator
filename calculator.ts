@@ -30,14 +30,20 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
         "pi": "π",
         "phi": "φ",
         "tau": "τ",
-        "e": "e"
+        "e": "e",
+        "g": "g",
+        "G": "G",
+        "c": "c"
     };
     // the values of the constants
     const mathConstVal: Record<string, number> = {
         "π": 3.14159_26535_89793_23846_26433_83279_50288_41971_69399_37510_58209_74944_59230_78164_06286_20899_86280_34825_34211_70679,
         "φ": 1.61803398874989484820458683436563811772030917980576286213544862270526046281890244970720720418939113748475408807538689175,
         "e": 2.718281828459045235360287471352662497757247093699959574966967627724076630353,
-        "τ": 6.28318_53071_79586_47692
+        "τ": 6.28318_53071_79586_47692,
+        "g": 9.81,
+        "G": 6.67 * Math.pow(10, -11),
+        "c": 299_793_458
     }
     // General Greek letters requiring a backslash
     const greekLetters: Record<string, string> = {
@@ -168,6 +174,7 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
         }
 
         calculation = replaceVariables(calculation, variables);
+        calculation = replaceConstants(calculation);
 
         if (contains(Object.values(calculation), "√")) {
             calculation = calculation.replace(
@@ -230,7 +237,7 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
         if (isValid) {
             try {
-                calc = replaceConstants(calc);
+                // calc = replaceConstants(calc);
                 let result = eval(calc);
 
                 // putting the result in the result container
