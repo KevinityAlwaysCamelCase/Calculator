@@ -5,12 +5,6 @@ let equalsBtn = document.getElementById('equals-btn') as HTMLButtonElement;
 let clearBtn = document.getElementById('clear-btn') as HTMLButtonElement;
 let backspaceBtn = document.getElementById('backspace-btn') as HTMLButtonElement;
 
-if (!Array.prototype.includes) {
-    Array.prototype.includes = function (search, start) {
-        return this.indexOf(search, start) !== -1;
-    };
-}
-
 // checking if they do not correspond to what we want
 if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) {
     console.error("One or more required elements are missing from the DOM.");
@@ -105,6 +99,18 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
         }
         return false;
     }
+    // replacing variables with values
+    function replaceVariables(input: string, variables: Record<string, number>) {
+        for (let key in mathConstVal) {
+            const regex = new RegExp(key, 'g');
+            input = input.replace(regex, mathConstVal[key].toString());
+        }
+        for (let key in variables) {
+            const regex = new RegExp(key, 'g');
+            input = input.replace(regex, variables[key].toString());
+        }
+        return input;
+    }
 
     // evaluating the calculation
     function evaluateExpression() {
@@ -114,8 +120,8 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
         let variables: Record<string, number> = {};
 
         if (calcInput.value.includes("where")) {
-            let indexOfWhere = calcInput.value.indexOf("where");
-            let slicedCalc = calcInput.value.slice(indexOfWhere + 5);
+            let indexOfWhere = calculation.indexOf("where");
+            let slicedCalc = calculation.slice(indexOfWhere + 5);
             let definedVars = slicedCalc.split(";");
 
             definedVars.forEach((variable) => {
@@ -137,7 +143,7 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
             })
         }
 
-        calculation = calculation.split("where")[0].trim()
+        calculation = calculation.split("where")[0].trim();
 
         // checking if the components are valid
         for (let i = 0; i < calculation.length; i++) {
@@ -153,16 +159,7 @@ if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) 
 
         if (isValid) {
             try {
-                // replacing constants with values
-                for (let key in mathConstVal) {
-                    const regex = new RegExp(key, 'g');
-                    calc = calc.replace(regex, mathConstVal[key].toString());
-                }
-                for (let key in variables) {
-                    const regex = new RegExp(key, 'g');
-                    calc = calc.replace(regex, variables[key].toString());
-                }
-
+                calc = replaceVariables(calc, variables);
                 let result = eval(calc);
 
                 // putting the result in the result container

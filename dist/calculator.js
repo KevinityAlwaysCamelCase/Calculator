@@ -4,11 +4,6 @@ var numBtn = document.querySelectorAll('.number-btn');
 var equalsBtn = document.getElementById('equals-btn');
 var clearBtn = document.getElementById('clear-btn');
 var backspaceBtn = document.getElementById('backspace-btn');
-if (!Array.prototype.includes) {
-    Array.prototype.includes = function (search, start) {
-        return this.indexOf(search, start) !== -1;
-    };
-}
 // checking if they do not correspond to what we want
 if (!calcInput || !resultContainer || !equalsBtn || !clearBtn || !backspaceBtn) {
     console.error("One or more required elements are missing from the DOM.");
@@ -100,6 +95,18 @@ else {
         }
         return false;
     }
+    // replacing variables with values
+    function replaceVariables(input, variables) {
+        for (var key in mathConstVal_1) {
+            var regex = new RegExp(key, 'g');
+            input = input.replace(regex, mathConstVal_1[key].toString());
+        }
+        for (var key in variables) {
+            var regex = new RegExp(key, 'g');
+            input = input.replace(regex, variables[key].toString());
+        }
+        return input;
+    }
     // evaluating the calculation
     function evaluateExpression() {
         var calculation = calcInput.value; // the input of the user decomposed
@@ -107,8 +114,8 @@ else {
         var isValid = true; // variable to see if there is an invalid character
         var variables = {};
         if (calcInput.value.includes("where")) {
-            var indexOfWhere = calcInput.value.indexOf("where");
-            var slicedCalc = calcInput.value.slice(indexOfWhere + 5);
+            var indexOfWhere = calculation.indexOf("where");
+            var slicedCalc = calculation.slice(indexOfWhere + 5);
             var definedVars = slicedCalc.split(";");
             definedVars.forEach(function (variable) {
                 var components = variable.split("=");
@@ -144,15 +151,7 @@ else {
         }
         if (isValid) {
             try {
-                // replacing constants with values
-                for (var key in mathConstVal_1) {
-                    var regex = new RegExp(key, 'g');
-                    calc = calc.replace(regex, mathConstVal_1[key].toString());
-                }
-                for (var key in variables) {
-                    var regex = new RegExp(key, 'g');
-                    calc = calc.replace(regex, variables[key].toString());
-                }
+                calc = replaceVariables(calc, variables);
                 var result = eval(calc);
                 // putting the result in the result container
                 resultContainer.innerHTML = result;
